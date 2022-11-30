@@ -23,6 +23,19 @@ void display(void) {
     glFlush();
 }
 
+void resize(int w, int h) {
+    // ウィンドウ全体をビューポート(実際に描画が行われる領域)にする
+    //  (x, y, width, height) -> void
+    glViewport(0, 0, w, h);
+
+    // 変換行列の初期化(単位行列の設定)
+    glLoadIdentity();
+
+    // スクリーン上の表示領域をビューポートの大きさに一致させる。平行投影する。
+    //  (left, right, bottom, top, near, far) -> void
+    glOrtho(-w / 200.0, w / 200.0, -h / 200.0, h / 200.0, -1.0, 1.0);
+}
+
 // 一度だけ設定すれば良いものはここに書く
 void init(void) {
     // glClear(GL_COLOR_BUFFER_BIT)でウィンドウを塗りつぶす際に使う色を指定する。
@@ -38,6 +51,9 @@ int main(int argc, char *argv[]) {
     glutCreateWindow(argv[0]);
     // 図形表示。(描画する関数へのポインタ) -> void
     glutDisplayFunc(display);
+    // ウィンドウサイズ変更時の処理。
+    //(サイズ変更時に実行する関数へのポインタ) -> void
+    glutReshapeFunc(resize);
     init();
     // イベントループを開始する。 -> void
     glutMainLoop();
